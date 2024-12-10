@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculette avec PyScript</title>
+    <link rel="stylesheet" href="https://pyscript.net/alpha/pyscript.css">
+    <script defer src="https://pyscript.net/alpha/pyscript.js"></script>
+    <style>
+        .calculator {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .output {
+            font-size: 20px;
+            margin-top: 10px;
+        }
+        input, button {
+            padding: 10px;
+            font-size: 16px;
+            margin: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Calculette Simple avec PyScript</h1>
+
+    <div class="calculator">
+        <input type="number" id="num1" placeholder="Premier nombre">
+        <input type="number" id="num2" placeholder="Deuxième nombre">
+        <br>
+        <button onclick="window.calculer && window.calculer('+')">Addition</button>
+        <button onclick="window.calculer && window.calculer('-')">Soustraction</button>
+        <button onclick="window.calculer && window.calculer('*')">Multiplication</button>
+        <button onclick="window.calculer && window.calculer('/')">Division</button>
+        <div class="output" id="result"></div>
+    </div>
+
+    <py-script>
+        from js import document, window
+
+        def calculer(operateur):
+            # Récupérer les nombres
+            num1 = float(document.getElementById("num1").value)
+            num2 = float(document.getElementById("num2").value)
+            
+            # Effectuer l'opération choisie
+            if operateur == '+':
+                result = num1 + num2
+            elif operateur == '-':
+                result = num1 - num2
+            elif operateur == '*':
+                result = num1 * num2
+            elif operateur == '/':
+                if num2 != 0:
+                    result = num1 / num2
+                else:
+                    result = "Erreur : Division par zéro"
+            else:
+                result = "Opération inconnue"
+            
+            # Afficher le résultat
+            document.getElementById("result").innerText = f"Résultat : {result}"
+
+        # Expose the function to the global scope
+        window.calculer = calculer
+    </py-script>
+
+    <script>
+        // Ensure the function is available before using it
+        document.addEventListener("DOMContentLoaded", function() {
+            if (!window.calculer) {
+                console.error("window.calculer is not defined");
+            }
+        });
+    </script>
+</body>
+</html>
